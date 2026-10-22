@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>InnovaStock Web — Control de Inventario de Equipos TI</title>
+  <title>InnovaStock Web v2.0 — Control de Inventario y Auditoría TI</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
@@ -11,9 +11,9 @@
     <div class="header-content">
       <div>
         <h1 class="brand-title">InnovaStock Web</h1>
-		<p class="brand-subtitle">Sistema de Control de Inventario, Prestamos y Activos TI</p>
+        <p class="brand-subtitle">Sistema de Control de Inventario, Préstamos y Auditoría de Activos TI — Sede Lima</p>
       </div>
-      <span class="badge-version">Versión 1.0 (APF1) • InnovaTech Solutions S.A.C.</span>
+      <span class="badge-version">Release v2.0.0 (APF2) • InnovaTech Solutions S.A.C.</span>
     </div>
   </header>
 
@@ -39,9 +39,9 @@
     </section>
 
     <div class="main-grid">
-      <!-- Funcionalidad 1: Formulario de Registro -->
+      <!-- Funcionalidad 1 y Mejora APF2: Registro y Edición de Equipos -->
       <section class="card">
-        <h2 class="card-title">Registrar Nuevo Equipo</h2>
+        <h2 class="card-title" id="formTitle">Registrar Nuevo Equipo</h2>
         <div id="formToast" class="toast-msg" role="status" aria-live="polite"></div>
         <form id="formEquipo" novalidate>
           <div class="form-group">
@@ -75,7 +75,7 @@
             <input type="text" id="responsable" class="form-control" placeholder="Ej. Soporte TI" required />
           </div>
           <div class="form-group">
-            <label for="estado">Estado Inicial *</label>
+            <label for="estado">Estado Operativo *</label>
             <select id="estado" class="form-control">
               <option value="Disponible">Disponible</option>
               <option value="En Préstamo">En Préstamo</option>
@@ -83,58 +83,73 @@
               <option value="De Baja">De Baja</option>
             </select>
           </div>
-          <button type="submit" class="btn btn-primary">+ Registrar Equipo en Inventario</button>
+          <div style="display:flex; flex-direction:column; gap:0.5rem;">
+            <button type="submit" id="btnSubmitForm" class="btn btn-primary">+ Registrar Equipo en Inventario</button>
+            <button type="button" id="btnCancelarEdicion" class="btn btn-secondary" style="display:none; width:100%;">Cancelar Edición</button>
+          </div>
         </form>
       </section>
 
-      <!-- Funcionalidad 2: Catálogo, Búsqueda y Filtros -->
-      <section class="card">
-        <div class="toolbar">
-          <h2 class="card-title" style="margin-bottom:0; border:none;">Catálogo de Activos Tecnológicos</h2>
-          <div style="display:flex; gap:0.5rem;">
-            <button type="button" id="btnRestaurarDemo" class="btn btn-secondary btn-sm">Restaurar Demo</button>
-            <button type="button" id="btnExportarJSON" class="btn btn-secondary btn-sm">Exportar JSON</button>
+      <div style="display:flex; flex-direction:column; gap:1.5rem;">
+        <!-- Funcionalidad 2 y Mejora APF2: Catálogo, Filtros y Exportación CSV/JSON -->
+        <section class="card">
+          <div class="toolbar">
+            <h2 class="card-title" style="margin-bottom:0; border:none;">Catálogo de Activos Tecnológicos</h2>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <button type="button" id="btnRestaurarDemo" class="btn btn-secondary btn-sm">Restaurar Demo</button>
+              <button type="button" id="btnExportarCSV" class="btn btn-secondary btn-sm">Exportar CSV</button>
+              <button type="button" id="btnExportarJSON" class="btn btn-secondary btn-sm">Exportar JSON</button>
+            </div>
           </div>
-        </div>
 
-        <div class="toolbar">
-          <div class="filters-row">
-            <input type="search" id="inputBuscar" class="form-control" placeholder="Buscar por código, equipo, serie o responsable..." />
-            <select id="selectFiltroCategoria" class="form-control">
-              <option value="Todas">Todas las categorías</option>
-              <option value="Laptops">Laptops</option>
-              <option value="Monitores">Monitores</option>
-              <option value="Proyectores">Proyectores</option>
-              <option value="Redes">Redes</option>
-              <option value="Periféricos">Periféricos</option>
-            </select>
-            <select id="selectFiltroEstado" class="form-control">
-              <option value="Todos">Todos los estados</option>
-              <option value="Disponible">Disponible</option>
-              <option value="En Préstamo">En Préstamo</option>
-              <option value="En Mantenimiento">En Mantenimiento</option>
-              <option value="De Baja">De Baja</option>
-            </select>
+          <div class="toolbar">
+            <div class="filters-row">
+              <input type="search" id="inputBuscar" class="form-control" placeholder="Buscar por código, equipo, serie o responsable..." />
+              <select id="selectFiltroCategoria" class="form-control">
+                <option value="Todas">Todas las categorías</option>
+                <option value="Laptops">Laptops</option>
+                <option value="Monitores">Monitores</option>
+                <option value="Proyectores">Proyectores</option>
+                <option value="Redes">Redes</option>
+                <option value="Periféricos">Periféricos</option>
+              </select>
+              <select id="selectFiltroEstado" class="form-control">
+                <option value="Todos">Todos los estados</option>
+                <option value="Disponible">Disponible</option>
+                <option value="En Préstamo">En Préstamo</option>
+                <option value="En Mantenimiento">En Mantenimiento</option>
+                <option value="De Baja">De Baja</option>
+              </select>
+            </div>
           </div>
-        </div>
 
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Código / Serie</th>
-                <th>Equipo / Modelo</th>
-                <th>Categoría</th>
-                <th>Ubicación</th>
-                <th>Responsable</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="tablaEquiposBody"></tbody>
-          </table>
-        </div>
-      </section>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Código / Serie</th>
+                  <th>Equipo / Modelo</th>
+                  <th>Categoría</th>
+                  <th>Ubicación</th>
+                  <th>Responsable</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tablaEquiposBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Nueva Funcionalidad APF2: Bitácora de Auditoría y Movimientos -->
+        <section class="card">
+          <div class="toolbar" style="margin-bottom:0.75rem;">
+            <h2 class="card-title" style="margin-bottom:0; border:none;">Bitácora de Movimientos y Trazabilidad (APF2)</h2>
+            <button type="button" id="btnLimpiarHistorial" class="btn btn-secondary btn-sm">Limpiar Bitácora</button>
+          </div>
+          <ul id="listaHistorial" class="history-list"></ul>
+        </section>
+      </div>
     </div>
   </main>
 
