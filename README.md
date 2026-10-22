@@ -1,26 +1,31 @@
-# InnovaStock Web — Sistema de Control de Inventario y Auditoría de Equipos TI (v2.0.0)
+# InnovaStock Web — Sistema de Control de Inventario de Equipos TI
 
-Aplicación web funcional desarrollada para el Área de Soporte e Infraestructura TI de **InnovaTech Solutions S.A.C.** para automatizar el registro, edición, control de estados, exportación y auditoría de movimientos de activos tecnológicos.
+Aplicación web funcional desarrollada para el Área de Soporte e Infraestructura TI de **InnovaTech Solutions S.A.C.** para automatizar el registro, control de estados (Disponible, En Préstamo, En Mantenimiento, De Baja), búsqueda y reportes de activos tecnológicos.
 
-## 1. Evolución Funcional en el Avance 2 (APF2 — Release v2.0.0)
-- **Módulo Base (APF1):** Registro validado de equipos, catálogo dinámico con búsqueda/filtros y panel de indicadores KPI con exportación JSON.
-- **Nuevas Funcionalidades Incorporadas en APF2:**
-  1. **Bitácora de Movimientos y Auditoría (`feature/historial-movimientos`):** Registro automático con marca de tiempo de cada alta, edición, rotación de estado, eliminación y exportación realizada en el inventario.
-  2. **Edición de Equipos y Exportación CSV (`feature/edicion-equipos-csv`):** Modo de edición directa desde la tabla para actualizar datos de cualquier activo existente y descarga de reportes compatibles con Microsoft Excel en formato `.csv`.
+## 1. Problema o Necesidad
+El Área de Soporte e Infraestructura TI gestiona más de 180 activos tecnológicos mediante hojas de cálculo desconectadas y formatos en papel, ocasionando duplicidad de códigos patrimoniales, demoras de hasta 30 minutos en auditorías y falta de trazabilidad en la custodia de los equipos.
 
-## 2. Flujo Colaborativo y Gestión del Proyecto (APF2)
-- **Gestión de Actividades y Proyectos:** Tablero Kanban en **GitHub Projects** con estados *Todo (Pendiente)*, *In Progress (En Proceso)* y *Done (Finalizado)*, hitos (*Milestones*) y tareas vinculadas a ramas.
-- **Integración mediante Pull Requests:** Revisión de código y discusión técnica antes de fusionar cada rama `feature/*` hacia `main`.
-- **Versión Publicada:** Release oficial etiquetada como **`v2.0.0`** en GitHub Releases.
+## 2. Alcance del Proyecto (Avance de Proyecto Final 1)
+- **Funcionalidad 1 (feature/registro-equipos):** Formulario de alta de activos con validación estricta contra códigos duplicados y persistencia en LocalStorage.
+- **Funcionalidad 2 (feature/filtros-estados):** Búsqueda reactiva por código/nombre/responsable, filtros por categoría y estado, y rotación rápida del ciclo de vida del activo.
+- **Funcionalidad 3 (feature/dashboard-reportes):** Panel de 4 tarjetas de indicadores en tiempo real y descarga de respaldo del inventario en formato JSON.
 
 ## 3. Estructura del Repositorio
 ```text
 innovastock-web/
-├── index.html        # Interfaz principal (Dashboard KPI, Formulario Registro/Edición, Tabla y Bitácora)
+├── index.html        # Interfaz de usuario (Dashboard KPI, Formulario y Tabla)
 ├── css/
-│   └── styles.css    # Estilos modernos responsivos y estilos de bitácora
+│   └── styles.css    # Estilos modernos responsivos y distintivos por estado
 ├── js/
-│   └── app.js        # Lógica CRUD con edición, bitácora de auditoría y exportación CSV/JSON
-├── README.md         # Documentación técnica actualizada para APF2
+│   └── app.js        # Lógica CRUD, validaciones, filtros y persistencia LocalStorage
+├── README.md         # Documentación técnica del proyecto
 └── .gitignore        # Exclusión de archivos temporales
 ```
+
+## 4. Instrucciones de Ejecución
+1. Clonar el repositorio:
+   ```bash
+   git clone https://github.com/TU_USUARIO_GITHUB/innovastock-web.git
+   cd innovastock-web
+   ```
+2. Abrir el archivo `index.html` en cualquier navegador web moderno (Google Chrome, Microsoft Edge, Mozilla Firefox) o mediante **Live Server** en Visual Studio Code.
