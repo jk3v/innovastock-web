@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InnovaStock Web — Control de Inventario de Equipos TI</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-content">
+      <div>
+        <h1 class="brand-title">InnovaStock Web</h1>
+		<p class="brand-subtitle">Sistema de Control de Inventario, Prestamos y Activos TI</p>
+      </div>
+      <span class="badge-version">Versión 1.0 (APF1) • InnovaTech Solutions S.A.C.</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Funcionalidad 3: Panel de Indicadores KPI -->
+    <section class="kpi-grid" aria-label="Indicadores del Inventario">
+      <div class="kpi-card">
+        <div class="kpi-label">Total de Equipos</div>
+        <div class="kpi-value" id="kpiTotal">0</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Disponibles</div>
+        <div class="kpi-value" id="kpiDisponibles" style="color: #166534;">0</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">En Préstamo</div>
+        <div class="kpi-value" id="kpiPrestamo" style="color: #854d0e;">0</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">En Mantenimiento</div>
+        <div class="kpi-value" id="kpiMantenimiento" style="color: #991b1b;">0</div>
+      </div>
+    </section>
+
+    <div class="main-grid">
+      <!-- Funcionalidad 1: Formulario de Registro -->
+      <section class="card">
+        <h2 class="card-title">Registrar Nuevo Equipo</h2>
+        <div id="formToast" class="toast-msg" role="status" aria-live="polite"></div>
+        <form id="formEquipo" novalidate>
+          <div class="form-group">
+            <label for="codigo">Código Patrimonial *</label>
+            <input type="text" id="codigo" class="form-control" placeholder="Ej. INV-2026-005" required />
+          </div>
+          <div class="form-group">
+            <label for="nombre">Equipo / Marca y Modelo *</label>
+            <input type="text" id="nombre" class="form-control" placeholder="Ej. Laptop Lenovo ThinkPad T14" required />
+          </div>
+          <div class="form-group">
+            <label for="categoria">Categoría *</label>
+            <select id="categoria" class="form-control">
+              <option value="Laptops">Laptops</option>
+              <option value="Monitores">Monitores</option>
+              <option value="Proyectores">Proyectores</option>
+              <option value="Redes">Redes</option>
+              <option value="Periféricos">Periféricos</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="serie">Número de Serie *</label>
+            <input type="text" id="serie" class="form-control" placeholder="Ej. SN-8849201" required />
+          </div>
+          <div class="form-group">
+            <label for="ubicacion">Ubicación / Laboratorio *</label>
+            <input type="text" id="ubicacion" class="form-control" placeholder="Ej. Lab Cómputo 401" required />
+          </div>
+          <div class="form-group">
+            <label for="responsable">Responsable Asignado *</label>
+            <input type="text" id="responsable" class="form-control" placeholder="Ej. Soporte TI" required />
+          </div>
+          <div class="form-group">
+            <label for="estado">Estado Inicial *</label>
+            <select id="estado" class="form-control">
+              <option value="Disponible">Disponible</option>
+              <option value="En Préstamo">En Préstamo</option>
+              <option value="En Mantenimiento">En Mantenimiento</option>
+              <option value="De Baja">De Baja</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">+ Registrar Equipo en Inventario</button>
+        </form>
+      </section>
+
+      <!-- Funcionalidad 2: Catálogo, Búsqueda y Filtros -->
+      <section class="card">
+        <div class="toolbar">
+          <h2 class="card-title" style="margin-bottom:0; border:none;">Catálogo de Activos Tecnológicos</h2>
+          <div style="display:flex; gap:0.5rem;">
+            <button type="button" id="btnRestaurarDemo" class="btn btn-secondary btn-sm">Restaurar Demo</button>
+            <button type="button" id="btnExportarJSON" class="btn btn-secondary btn-sm">Exportar JSON</button>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div class="filters-row">
+            <input type="search" id="inputBuscar" class="form-control" placeholder="Buscar por código, equipo, serie o responsable..." />
+            <select id="selectFiltroCategoria" class="form-control">
+              <option value="Todas">Todas las categorías</option>
+              <option value="Laptops">Laptops</option>
+              <option value="Monitores">Monitores</option>
+              <option value="Proyectores">Proyectores</option>
+              <option value="Redes">Redes</option>
+              <option value="Periféricos">Periféricos</option>
+            </select>
+            <select id="selectFiltroEstado" class="form-control">
+              <option value="Todos">Todos los estados</option>
+              <option value="Disponible">Disponible</option>
+              <option value="En Préstamo">En Préstamo</option>
+              <option value="En Mantenimiento">En Mantenimiento</option>
+              <option value="De Baja">De Baja</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Código / Serie</th>
+                <th>Equipo / Modelo</th>
+                <th>Categoría</th>
+                <th>Ubicación</th>
+                <th>Responsable</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaEquiposBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
